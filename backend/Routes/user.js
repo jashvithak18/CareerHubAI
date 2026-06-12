@@ -1,0 +1,40 @@
+const express = require("express");
+const router = express.Router();
+const User = require("../Model/User");
+const { verifyToken } = require("../middleware/authMiddleware");
+
+// Sync authenticated user details with MongoDB
+router.post("/sync", verifyToken, async (req, res) => {
+  const { uid, email, name } = req.user;
+  const { photo } = req.body;
+
+  try {
+    let user = await User.findOne({ uid });
+    if (user) {
+      // Update existing record if details changed
+      user.name = name || user.name;
+      user.email = email || user.email;
+      if (photo) {
+        user.photo = photo;
+      }
+      await user.save();
+      return res.status(200).json({ success: true, message: "User details synced", user });
+    } else {
+      // Create new user record
+      user = new User({
+        uid,
+        name: name || email.split("@")[0],
+        email,
+        photo: photo || "",
+        role: "student" // Default to student
+      });
+      await user.save();
+      return res.status(201).json({ success: true, message: "User registered in DB", user });
+    }
+  } catch (error) {
+    console.error("User Sync Error:", error);
+    return res.status(500).json({ error: "Internal Server Error during user sync" });
+  }
+});
+
+module.exports = router;

@@ -1,0 +1,20 @@
+# Dependencies
+**/node_modules/
+
+# Next.js build output
+internarea/.next/
+internarea/out/
+internarea/build/
+
+# Environment variables (to avoid leaking DB secrets)
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+**/.env.staging
+
+# System and debug logs
+*.log
+.DS_Store
+Thumbs.db
+.gemini/
