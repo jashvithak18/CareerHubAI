@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const User = require("../Model/User");
 
-// Cache for Google's public certificates to verify RS256 signatures
+// Cache for Google's public certificates to verify RS256 Firebase ID token signatures
 let publicKeysCache = null;
 let cacheExpiry = 0;
 
@@ -11,44 +11,45 @@ const getFirebasePublicKeys = async () => {
   if (publicKeysCache && now < cacheExpiry) {
     return publicKeysCache;
   }
-  
-  try {
-    const res = await axios.get(
-      "https://www.googleapis.com/robot/v1/metadata/x509/securetoken-system@system.gserviceaccount.com"
-    );
-    publicKeysCache = res.data;
-    // Cache for 6 hours
-    cacheExpiry = now + 6 * 60 * 60 * 1000;
-    return publicKeysCache;
-  } catch (err) {
-    console.error("Error fetching Google public certificates:", err.message);
-    throw new Error("Failed to fetch public certificates for token verification");
-  }
+
+  // CORRECT endpoint for Firebase ID Token public keys
+  const res = await axios.get(
+    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+  );
+
+  publicKeysCache = res.data;
+  // Cache for 1 hour
+  cacheExpiry = now + 60 * 60 * 1000;
+  return publicKeysCache;
 };
 
 const verifyFirebaseToken = async (token) => {
+  // Decode header to get key ID (kid)
   const decoded = jwt.decode(token, { complete: true });
   if (!decoded || !decoded.header || !decoded.header.kid) {
-    throw new Error("Invalid token format or missing key identifier (kid)");
+    throw new Error("Invalid token: missing header or kid");
   }
 
   const kid = decoded.header.kid;
   const publicKeys = await getFirebasePublicKeys();
   const cert = publicKeys[kid];
+
   if (!cert) {
-    throw new Error("Matching public certificate not found for token");
+    // Invalidate cache so fresh keys are fetched next time
+    publicKeysCache = null;
+    throw new Error(`No matching certificate found for kid: ${kid}`);
   }
 
   const projectId = process.env.FIREBASE_PROJECT_ID || "careerhubai";
 
-  // Verify signature, issuer, and audience claims
-  const verifiedPayload = jwt.verify(token, cert, {
+  // Verify RS256 signature + audience + issuer
+  const payload = jwt.verify(token, cert, {
     algorithms: ["RS256"],
     audience: projectId,
-    issuer: `https://securetoken.google.com/${projectId}`
+    issuer: `https://securetoken.google.com/${projectId}`,
   });
 
-  return verifiedPayload;
+  return payload;
 };
 
 const verifyToken = async (req, res, next) => {
@@ -59,37 +60,41 @@ const verifyToken = async (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
 
-  // 1. Try to verify as local admin JWT first
+  // 1. Try admin JWT first (signed locally)
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecret_admin_key_12345");
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "supersecret_admin_key_12345"
+    );
     if (decoded && decoded.role === "admin") {
       req.user = decoded;
       return next();
     }
   } catch (err) {
-    // Not a local admin JWT, ignore error and try Firebase token next
+    // Not a local admin JWT — fall through to Firebase verification
   }
 
   // 2. Verify as Firebase ID Token
   try {
-    const decodedToken = await verifyFirebaseToken(token);
-    
-    // Look up user in MongoDB to check role
-    const dbUser = await User.findOne({ uid: decodedToken.uid });
-    
+    const payload = await verifyFirebaseToken(token);
+
+    const dbUser = await User.findOne({ uid: payload.uid });
+
     req.user = {
-      uid: decodedToken.uid,
-      email: decodedToken.email,
-      name: decodedToken.name || (decodedToken.email ? decodedToken.email.split("@")[0] : "user"),
-      role: dbUser ? dbUser.role : "student"
+      uid: payload.uid,
+      email: payload.email,
+      name:
+        payload.name ||
+        (payload.email ? payload.email.split("@")[0] : "user"),
+      role: dbUser ? dbUser.role : "student",
     };
-    
-    next();
+
+    return next();
   } catch (error) {
-    console.error("Authentication Error:", error.message);
-    return res.status(401).json({ 
-      error: "Access Denied: Invalid Token", 
-      details: error.message 
+    console.error("Firebase token verification failed:", error.message);
+    return res.status(401).json({
+      error: "Access Denied: Invalid Token",
+      details: error.message,
     });
   }
 };
@@ -103,7 +108,4 @@ const requireRole = (roles) => {
   };
 };
 
-module.exports = {
-  verifyToken,
-  requireRole
-};
+module.exports = { verifyToken, requireRole };
