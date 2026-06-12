@@ -5,12 +5,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDbYTYs_oSK2rvtzHxBCPFrqdXM-l7MokQ",
-  authDomain: "internshala-9e300.firebaseapp.com",
-  projectId: "internshala-9e300",
-  storageBucket: "internshala-9e300.firebasestorage.app",
-  messagingSenderId: "304425115290",
-  appId: "1:304425115290:web:1b0653f1acd4192b848923",
+  apiKey: "AIzaSyANTF5DTKy1y2q-c8OfUzE9kRiZl6s5YOs",
+  authDomain: "careerhubai.firebaseapp.com",
+  projectId: "careerhubai",
+  storageBucket: "careerhubai.firebasestorage.app",
+  messagingSenderId: "1080628947571",
+  appId: "1:1080628947571:web:b712e55b60fe612cc7d806",
+  measurementId: "G-VNGW3018CX"
 };
 
 // Initialize Firebase

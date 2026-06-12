@@ -5,7 +5,7 @@ const User = require("../Model/User");
 // Initialize Firebase Admin SDK
 if (admin.getApps().length === 0) {
   admin.initializeApp({
-    projectId: process.env.FIREBASE_PROJECT_ID || "internshala-9e300"
+    projectId: process.env.FIREBASE_PROJECT_ID || "careerhubai"
   });
 }
 
