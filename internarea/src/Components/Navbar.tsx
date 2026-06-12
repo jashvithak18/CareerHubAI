@@ -129,12 +129,12 @@ const Navbar = () => {
               
               {/* Internships Dropdown */}
               <div className="relative group py-4">
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
+                <Link href="/internship" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
                   <span>Internships</span>
                   <svg className="w-4 h-4 ml-0.5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
-                </button>
+                </Link>
                 <div className="absolute left-0 mt-1 w-[400px] bg-white rounded-lg shadow-xl border border-gray-100 hidden group-hover:grid grid-cols-2 p-4 z-50 transition-all duration-300">
                   <div className="space-y-1">
                     <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Profile</p>
@@ -157,12 +157,12 @@ const Navbar = () => {
 
               {/* Jobs Dropdown */}
               <div className="relative group py-4">
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
+                <Link href="/job" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
                   <span>Jobs</span>
                   <svg className="w-4 h-4 ml-0.5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
-                </button>
+                </Link>
                 <div className="absolute left-0 mt-1 w-[400px] bg-white rounded-lg shadow-xl border border-gray-100 hidden group-hover:grid grid-cols-2 p-4 z-50 transition-all duration-300">
                   <div className="space-y-1">
                     <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Profile</p>
@@ -183,13 +183,6 @@ const Navbar = () => {
                 </div>
               </div>
 
-              {user && user.role !== "admin" && (
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
-                  <Link href="/resumes">
-                    <span>Resume Builder</span>
-                  </Link>
-                </button>
-              )}
               {user && user.role === "admin" && (
                 <button className="flex items-center space-x-1 text-purple-700 hover:text-purple-900 font-bold text-sm">
                   <Link href="/adminpanel">

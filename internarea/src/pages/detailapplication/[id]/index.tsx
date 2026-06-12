@@ -9,6 +9,17 @@ const DetailApplication = () => {
   const [loading, setloading] = useState(false);
   const [data, setdata] = useState<any>(null);
 
+  const handleViewResume = () => {
+    if (data && data.resumePdf) {
+      const pdfWindow = window.open("");
+      if (pdfWindow) {
+        pdfWindow.document.write(
+          `<iframe width='100%' height='100%' style='border:0' src='${data.resumePdf}'></iframe>`
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -105,6 +116,23 @@ const DetailApplication = () => {
                   <p className="text-gray-600 leading-relaxed">
                     {data.availability}
                   </p>
+                </div>
+              )}
+
+              {data.resumePdf && (
+                <div className="mb-8">
+                  <div className="flex items-center mb-4">
+                    <FileText className="w-5 h-5 text-blue-600 mr-2" />
+                    <h2 className="text-sm font-medium text-gray-500">
+                      Uploaded Resume
+                    </h2>
+                  </div>
+                  <button
+                    onClick={handleViewResume}
+                    className="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-50 transition focus:outline-none"
+                  >
+                    View / Download Resume PDF
+                  </button>
                 </div>
               )}
 

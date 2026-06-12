@@ -21,6 +21,7 @@ const Applicationipschema = new mongoose.Schema({
   },
   Application: String, // Keep the job/internship ID as string reference
   availability: String, // Save the availability details submitted by students
+  resumePdf: String, // Base64 encoded PDF resume
 });
 
 module.exports = mongoose.model("Application", Applicationipschema);

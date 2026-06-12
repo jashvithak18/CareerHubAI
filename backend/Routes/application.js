@@ -18,7 +18,8 @@ router.post("/", verifyToken, async (req, res) => {
       photo: req.body.user?.photo || ""
     },
     Application: req.body.Application, // ID of job/internship
-    availability: req.body.availability
+    availability: req.body.availability,
+    resumePdf: req.body.resumePdf
   });
 
   try {

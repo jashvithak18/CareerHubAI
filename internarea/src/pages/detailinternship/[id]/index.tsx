@@ -22,7 +22,29 @@ const InternshipDetails = () => {
   const [availability, setAvailability] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
+  const [resumePdf, setResumePdf] = useState<string | null>(null);
+  const [pdfFileName, setPdfFileName] = useState("");
   const user = useSelector(selectuser);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== "application/pdf") {
+        toast.error("Please upload a PDF file only");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size must be less than 5MB");
+        return;
+      }
+      setPdfFileName(file.name);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setResumePdf(reader.result as string);
+      };
+    }
+  };
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -47,6 +69,10 @@ const InternshipDetails = () => {
   }
 
   const handlesubmitapplication = async () => {
+    if (!resumePdf) {
+      toast.error("Please upload your resume PDF");
+      return;
+    }
     if (!coverLetter.trim()) {
       toast.error("Please write a cover letter");
       return;
@@ -67,7 +93,8 @@ const InternshipDetails = () => {
           photo: user.photo || ""
         },
         Application: id,
-        availability: availability
+        availability: availability,
+        resumePdf: resumePdf
       };
       await api.post("/application", applicationdata);
       toast.success("Application submitted successfully");
@@ -189,11 +216,28 @@ const InternshipDetails = () => {
               {/* Resume Section */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Your Resume
+                  Upload Resume (PDF)*
                 </h3>
-                <p className="text-gray-600">
-                  Your current profile details will be submitted with the application
-                </p>
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="resume-upload"
+                  />
+                  <label
+                    htmlFor="resume-upload"
+                    className="cursor-pointer bg-gray-100 hover:bg-gray-200 border border-gray-300 text-black rounded-lg px-4 py-2 text-sm font-semibold transition"
+                  >
+                    Choose PDF File
+                  </label>
+                  {pdfFileName ? (
+                    <span className="text-sm text-gray-600 font-medium">{pdfFileName}</span>
+                  ) : (
+                    <span className="text-sm text-gray-400">No file selected (Required)</span>
+                  )}
+                </div>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
