@@ -9,11 +9,12 @@ router.post("/sync", verifyToken, async (req, res) => {
   const { photo } = req.body;
 
   try {
-    const query = { uid };
+    let user;
     if (email) {
-      query.$or = [{ uid }, { email }];
+      user = await User.findOne({ $or: [{ uid }, { email }] });
+    } else {
+      user = await User.findOne({ uid });
     }
-    let user = await User.findOne(query);
 
     if (user) {
       // Update existing record if details changed or if updating to new firebase project uid
