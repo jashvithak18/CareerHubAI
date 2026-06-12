@@ -2,6 +2,20 @@ require("dotenv").config();
 const bodyparser = require("body-parser");
 const express = require("express");
 const app = express();
+
+// Global error logger for diagnostics
+global.errorLog = [];
+global.logError = (type, err) => {
+  global.errorLog.push({
+    timestamp: new Date().toISOString(),
+    type,
+    message: err.message,
+    stack: err.stack
+  });
+  if (global.errorLog.length > 50) {
+    global.errorLog.shift();
+  }
+};
 const cors = require("cors");
 const { connect } = require("./db");
 const router = require("./Routes/index");

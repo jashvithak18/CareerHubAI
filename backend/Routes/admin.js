@@ -229,4 +229,12 @@ router.get("/debug-db", async (req, res) => {
   }
 });
 
+// GET /api/admin/error-logs - Diagnostic endpoint for captured error stacks
+router.get("/error-logs", (req, res) => {
+  res.status(200).json({
+    success: true,
+    logs: global.errorLog || []
+  });
+});
+
 module.exports = router;

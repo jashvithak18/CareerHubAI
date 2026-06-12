@@ -11,6 +11,9 @@ router.get("/", verifyToken, async (req, res) => {
     res.status(200).json(resumes);
   } catch (error) {
     console.error("Error fetching resumes:", error);
+    if (global.logError) {
+      global.logError("Fetch Resumes", error);
+    }
     res.status(500).json({ error: "Internal server error", message: error.message, stack: error.stack });
   }
 });

@@ -40,6 +40,9 @@ router.post("/sync", verifyToken, async (req, res) => {
     }
   } catch (error) {
     console.error("User Sync Error:", error);
+    if (global.logError) {
+      global.logError("User Sync", error);
+    }
     return res.status(500).json({ 
       error: "Internal Server Error during user sync", 
       message: error.message,
