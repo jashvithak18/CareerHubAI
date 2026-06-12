@@ -87,7 +87,10 @@ const verifyToken = async (req, res, next) => {
     next();
   } catch (error) {
     console.error("Authentication Error:", error.message);
-    return res.status(401).json({ error: "Access Denied: Invalid Token" });
+    return res.status(401).json({ 
+      error: "Access Denied: Invalid Token", 
+      details: error.message 
+    });
   }
 };
 
