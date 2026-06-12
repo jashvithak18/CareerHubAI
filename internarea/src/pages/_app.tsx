@@ -40,8 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 name: authuser.displayName,
                 email: authuser.email,
                 phoneNumber: authuser.phoneNumber,
-                plan: dbUser.plan || "free",
-                atsChecksThisMonth: dbUser.atsChecksThisMonth || 0
+                plan: dbUser.plan || "free"
               })
             );
           } catch (err) {

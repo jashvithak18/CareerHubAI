@@ -97,7 +97,7 @@ const UpgradeSubscription = () => {
             <Sparkles className="text-amber-500 fill-amber-500" /> Choose Your CareerHub AI Plan
           </h1>
           <p className="mt-2 text-sm text-gray-500 font-medium">
-            Unlock premium templates, unlimited resumes, and infinite ATS matching feedback
+            Unlock premium templates and unlimited resumes
           </p>
         </div>
 
@@ -115,9 +115,6 @@ const UpgradeSubscription = () => {
                 <ul className="space-y-3 mt-6 border-t pt-6 text-sm">
                   <li className="flex items-center gap-2 text-gray-600">
                     <Check size={16} className="text-green-500 shrink-0" /> Max 1 Saved Resume
-                  </li>
-                  <li className="flex items-center gap-2 text-gray-600">
-                    <Check size={16} className="text-green-500 shrink-0" /> 3 ATS Score Checks / month
                   </li>
                   <li className="flex items-center gap-2 text-gray-600">
                     <Check size={16} className="text-green-500 shrink-0" /> Standard Templates
@@ -156,9 +153,6 @@ const UpgradeSubscription = () => {
                 <ul className="space-y-3 mt-6 border-t pt-6 text-sm">
                   <li className="flex items-center gap-2 text-gray-600 font-semibold">
                     <Check size={16} className="text-blue-500 shrink-0" /> Unlimited Saved Resumes
-                  </li>
-                  <li className="flex items-center gap-2 text-gray-600 font-semibold">
-                    <Check size={16} className="text-blue-500 shrink-0" /> Unlimited ATS Checks
                   </li>
                   <li className="flex items-center gap-2 text-gray-600 font-semibold">
                     <Check size={16} className="text-blue-500 shrink-0" /> Premium Templates (Creative)

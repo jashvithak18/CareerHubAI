@@ -85,18 +85,11 @@ const Navbar = () => {
                 </Link>
               </button>
               {user && user.role !== "admin" && (
-                <>
-                  <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
-                    <Link href="/resumes">
-                      <span>Resume Builder</span>
-                    </Link>
-                  </button>
-                  <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
-                    <Link href="/ats">
-                      <span>ATS Checker</span>
-                    </Link>
-                  </button>
-                </>
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
+                  <Link href="/resumes">
+                    <span>Resume Builder</span>
+                  </Link>
+                </button>
               )}
               {user && user.role === "admin" && (
                 <button className="flex items-center space-x-1 text-purple-700 hover:text-purple-900 font-bold text-sm">

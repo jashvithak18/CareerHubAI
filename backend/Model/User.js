@@ -28,14 +28,6 @@ const UserSchema = new mongoose.Schema({
     enum: ["free", "pro"],
     default: "free"
   },
-  atsChecksThisMonth: {
-    type: Number,
-    default: 0
-  },
-  lastAtsCheckReset: {
-    type: Date,
-    default: Date.now
-  },
   createdAt: { 
     type: Date, 
     default: Date.now 

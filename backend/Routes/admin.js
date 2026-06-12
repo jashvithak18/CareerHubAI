@@ -39,13 +39,11 @@ router.get("/stats", verifyToken, requireRole(["admin"]), async (req, res) => {
     const totalApplications = await Application.countDocuments();
     
     // Aggregation of user metrics
-    const users = await User.find({}, "plan atsChecksThisMonth");
-    let totalAtsChecks = 0;
+    const users = await User.find({}, "plan");
     let freeUsers = 0;
     let proUsers = 0;
     
     users.forEach(u => {
-      totalAtsChecks += u.atsChecksThisMonth || 0;
       if (u.plan === "pro") {
         proUsers++;
       } else {
@@ -58,7 +56,6 @@ router.get("/stats", verifyToken, requireRole(["admin"]), async (req, res) => {
       totalJobs,
       totalInternships,
       totalApplications,
-      totalAtsChecks,
       freeUsers,
       proUsers,
       totalUsers: users.length

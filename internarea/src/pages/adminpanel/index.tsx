@@ -27,7 +27,6 @@ const AdminPanel = () => {
     totalJobs: 0,
     totalInternships: 0,
     totalApplications: 0,
-    totalAtsChecks: 0,
     freeUsers: 0,
     proUsers: 0,
     totalUsers: 0
@@ -139,7 +138,6 @@ const AdminPanel = () => {
     { label: 'Active Jobs', value: stats.totalJobs, icon: Briefcase, color: 'text-green-600 bg-green-50' },
     { label: 'Submitted Applications', value: stats.totalApplications, icon: Mail, color: 'text-blue-600 bg-blue-50' },
     { label: 'Resumes Created', value: stats.totalResumes, icon: BarChart3, color: 'text-orange-600 bg-orange-50' },
-    { label: 'ATS Checks Run', value: stats.totalAtsChecks, icon: Sparkles, color: 'text-yellow-600 bg-yellow-50' },
     { label: 'Total Enrolled Users', value: stats.totalUsers, icon: Users, color: 'text-indigo-600 bg-indigo-50' }
   ];
 
@@ -178,7 +176,7 @@ const AdminPanel = () => {
         </div>
 
         {/* Platform metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {statCards.map((stat, idx) => (
             <div key={idx} className="bg-white rounded-xl border p-4 shadow-sm flex flex-col justify-between">
               <div className="flex justify-between items-center">

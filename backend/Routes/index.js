@@ -6,7 +6,6 @@ const job = require("./job");
 const application = require("./application");
 const user = require("./user");
 const resume = require("./resume");
-const ats = require("./ats");
 const payment = require("./payment");
 const settings = require("./settings");
 
@@ -16,7 +15,6 @@ router.use("/job", job);
 router.use("/application", application);
 router.use("/user", user);
 router.use("/resume", resume);
-router.use("/ats", ats);
 router.use("/payment", payment);
 router.use("/settings", settings);
 
