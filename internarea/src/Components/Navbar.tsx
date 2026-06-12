@@ -58,6 +58,58 @@ const Navbar = () => {
     }
   };
 
+  const internshipProfiles = [
+    { name: "Web Development", href: "/internship?category=Web%20Development" },
+    { name: "Android Development", href: "/internship?category=Android%20Development" },
+    { name: "Graphic Design", href: "/internship?category=Graphic%20Design" },
+    { name: "Digital Marketing", href: "/internship?category=Digital%20Marketing" },
+    { name: "Content Writing", href: "/internship?category=Content%20Writing" },
+    { name: "Finance", href: "/internship?category=Finance" },
+    { name: "Human Resources (HR)", href: "/internship?category=Human%20Resources" },
+    { name: "Data Science", href: "/internship?category=Data%20Science" },
+    { name: "Operations", href: "/internship?category=Operations" },
+    { name: "UI/UX Design", href: "/internship?category=UI%2FUX%20Design" },
+  ];
+
+  const internshipLocations = [
+    { name: "Work From Home", href: "/internship?location=Remote" },
+    { name: "Delhi", href: "/internship?location=Delhi" },
+    { name: "Bangalore", href: "/internship?location=Bangalore" },
+    { name: "Mumbai", href: "/internship?location=Mumbai" },
+    { name: "Pune", href: "/internship?location=Pune" },
+    { name: "Hyderabad", href: "/internship?location=Hyderabad" },
+    { name: "Chennai", href: "/internship?location=Chennai" },
+    { name: "Kolkata", href: "/internship?location=Kolkata" },
+    { name: "Noida", href: "/internship?location=Noida" },
+    { name: "Gurgaon", href: "/internship?location=Gurgaon" },
+  ];
+
+  const jobProfiles = [
+    { name: "Software Engineer", href: "/job?category=Software%20Engineer" },
+    { name: "Frontend Developer", href: "/job?category=Frontend%20Developer" },
+    { name: "Backend Developer", href: "/job?category=Backend%20Developer" },
+    { name: "Full Stack Developer", href: "/job?category=Full%20Stack%20Developer" },
+    { name: "Marketing Manager", href: "/job?category=Marketing%20Manager" },
+    { name: "Sales Associate", href: "/job?category=Sales%20Associate" },
+    { name: "Graphic Designer", href: "/job?category=Graphic%20Designer" },
+    { name: "Data Analyst", href: "/job?category=Data%20Analyst" },
+    { name: "Product Manager", href: "/job?category=Product%20Manager" },
+    { name: "HR Recruiter", href: "/job?category=HR%20Recruiter" },
+  ];
+
+  const jobLocations = [
+    { name: "Work From Home", href: "/job?location=Remote" },
+    { name: "Bangalore", href: "/job?location=Bangalore" },
+    { name: "Delhi", href: "/job?location=Delhi" },
+    { name: "Mumbai", href: "/job?location=Mumbai" },
+    { name: "Pune", href: "/job?location=Pune" },
+    { name: "Hyderabad", href: "/job?location=Hyderabad" },
+    { name: "Chennai", href: "/job?location=Chennai" },
+    { name: "Noida", href: "/job?location=Noida" },
+    { name: "Gurgaon", href: "/job?location=Gurgaon" },
+    { name: "Kolkata", href: "/job?location=Kolkata" },
+  ];
+
   return (
     <div className="relative text-black no-print">
       <nav className="bg-white shadow-md">
@@ -74,16 +126,63 @@ const Navbar = () => {
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-6">
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
-                <Link href="/internship">
+              
+              {/* Internships Dropdown */}
+              <div className="relative group py-4">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
                   <span>Internships</span>
-                </Link>
-              </button>
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
-                <Link href="/job">
+                  <svg className="w-4 h-4 ml-0.5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className="absolute left-0 mt-1 w-[400px] bg-white rounded-lg shadow-xl border border-gray-100 hidden group-hover:grid grid-cols-2 p-4 z-50 transition-all duration-300">
+                  <div className="space-y-1">
+                    <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Profile</p>
+                    {internshipProfiles.map((p) => (
+                      <Link key={p.name} href={p.href} className="block px-2 py-1 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded font-medium">
+                        {p.name}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="space-y-1 border-l border-gray-100 pl-4">
+                    <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Location</p>
+                    {internshipLocations.map((l) => (
+                      <Link key={l.name} href={l.href} className="block px-2 py-1 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded font-medium">
+                        {l.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Jobs Dropdown */}
+              <div className="relative group py-4">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm focus:outline-none">
                   <span>Jobs</span>
-                </Link>
-              </button>
+                  <svg className="w-4 h-4 ml-0.5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className="absolute left-0 mt-1 w-[400px] bg-white rounded-lg shadow-xl border border-gray-100 hidden group-hover:grid grid-cols-2 p-4 z-50 transition-all duration-300">
+                  <div className="space-y-1">
+                    <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Profile</p>
+                    {jobProfiles.map((p) => (
+                      <Link key={p.name} href={p.href} className="block px-2 py-1 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded font-medium">
+                        {p.name}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="space-y-1 border-l border-gray-100 pl-4">
+                    <p className="text-2xs font-extrabold text-blue-600 uppercase tracking-wider px-2 mb-1.5 border-b pb-1">By Location</p>
+                    {jobLocations.map((l) => (
+                      <Link key={l.name} href={l.href} className="block px-2 py-1 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded font-medium">
+                        {l.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {user && user.role !== "admin" && (
                 <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold text-sm">
                   <Link href="/resumes">

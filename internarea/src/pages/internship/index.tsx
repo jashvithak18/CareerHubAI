@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const parseStipend = (stipendStr: string): number => {
   if (!stipendStr) return 0;
@@ -21,6 +22,7 @@ const parseStipend = (stipendStr: string): number => {
 };
 
 const InternshipListing = () => {
+  const router = useRouter();
   const [filteredInternships, setfilteredInternships] = useState<any>([]);
   const [isFiltervisible, setisFiltervisible] = useState(false);
   const [filter, setfilters] = useState({
@@ -31,6 +33,17 @@ const InternshipListing = () => {
     stipend: 0, // Default to 0 minimum stipend
   });
   const [internshipData, setinternship] = useState<any>([]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { category, location } = router.query;
+      setfilters((prev) => ({
+        ...prev,
+        category: typeof category === "string" ? category : prev.category,
+        location: typeof location === "string" ? location : prev.location,
+      }));
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     const fetchdata = async () => {
