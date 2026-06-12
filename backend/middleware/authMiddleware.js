@@ -78,10 +78,13 @@ const verifyToken = async (req, res, next) => {
   try {
     const payload = await verifyFirebaseToken(token);
 
-    const dbUser = await User.findOne({ uid: payload.uid });
+    // Firebase ID tokens use 'sub' (subject) as the UID — not 'uid'
+    const firebaseUid = payload.sub || payload.user_id || payload.uid;
+
+    const dbUser = await User.findOne({ uid: firebaseUid });
 
     req.user = {
-      uid: payload.uid,
+      uid: firebaseUid,
       email: payload.email,
       name:
         payload.name ||

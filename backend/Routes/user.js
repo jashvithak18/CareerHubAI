@@ -8,6 +8,12 @@ router.post("/sync", verifyToken, async (req, res) => {
   const { uid, email, name } = req.user;
   const { photo } = req.body;
 
+  // Safety guard: uid must be present to avoid validation failure
+  if (!uid) {
+    console.error("User sync rejected: uid is missing from token payload", req.user);
+    return res.status(400).json({ error: "Invalid token: uid not found in token payload" });
+  }
+
   try {
     let user;
     if (email) {
