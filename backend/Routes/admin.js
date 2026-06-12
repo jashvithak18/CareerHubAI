@@ -210,33 +210,22 @@ router.get("/seed", async (req, res) => {
   }
 });
 
-// GET /api/admin/debug - Get detailed error reports for User and Resume collections
-router.get("/debug", async (req, res) => {
-  const reports = {};
+// GET /api/admin/debug-db - Diagnostic endpoint for mongoose connection and collections
+router.get("/debug-db", async (req, res) => {
   try {
-    reports.mongooseState = mongoose.connection.readyState;
-    
-    try {
-      reports.userCount = await User.countDocuments();
-    } catch (err) {
-      reports.userError = { message: err.message, stack: err.stack };
-    }
-
-    try {
-      reports.resumeCount = await Resume.countDocuments();
-    } catch (err) {
-      reports.resumeError = { message: err.message, stack: err.stack };
-    }
-
-    try {
-      reports.sampleUser = await User.findOne({});
-    } catch (err) {
-      reports.sampleUserError = { message: err.message, stack: err.stack };
-    }
-
-    res.status(200).json(reports);
-  } catch (error) {
-    res.status(500).json({ error: error.message, stack: error.stack });
+    const mongooseState = mongoose.connection.readyState;
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    res.status(200).json({
+      success: true,
+      mongooseState, // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+      collections: collections.map(c => c.name),
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      stack: err.stack
+    });
   }
 });
 
