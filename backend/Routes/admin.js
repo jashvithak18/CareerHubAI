@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const User = require("../Model/User");
 const Resume = require("../Model/Resume");
 const Job = require("../Model/Job");
@@ -206,6 +207,36 @@ router.get("/seed", async (req, res) => {
   } catch (error) {
     console.error("Database seeding failed:", error);
     res.status(500).json({ error: "Database seeding failed", details: error.message });
+  }
+});
+
+// GET /api/admin/debug - Get detailed error reports for User and Resume collections
+router.get("/debug", async (req, res) => {
+  const reports = {};
+  try {
+    reports.mongooseState = mongoose.connection.readyState;
+    
+    try {
+      reports.userCount = await User.countDocuments();
+    } catch (err) {
+      reports.userError = { message: err.message, stack: err.stack };
+    }
+
+    try {
+      reports.resumeCount = await Resume.countDocuments();
+    } catch (err) {
+      reports.resumeError = { message: err.message, stack: err.stack };
+    }
+
+    try {
+      reports.sampleUser = await User.findOne({});
+    } catch (err) {
+      reports.sampleUserError = { message: err.message, stack: err.stack };
+    }
+
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ error: error.message, stack: error.stack });
   }
 });
 
