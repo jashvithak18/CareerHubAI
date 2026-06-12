@@ -1,13 +1,55 @@
-const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 const User = require("../Model/User");
 
-// Initialize Firebase Admin SDK
-if (admin.getApps().length === 0) {
-  admin.initializeApp({
-    projectId: process.env.FIREBASE_PROJECT_ID || "careerhubai"
+// Cache for Google's public certificates to verify RS256 signatures
+let publicKeysCache = null;
+let cacheExpiry = 0;
+
+const getFirebasePublicKeys = async () => {
+  const now = Date.now();
+  if (publicKeysCache && now < cacheExpiry) {
+    return publicKeysCache;
+  }
+  
+  try {
+    const res = await axios.get(
+      "https://www.googleapis.com/robot/v1/metadata/x509/securetoken-system@system.gserviceaccount.com"
+    );
+    publicKeysCache = res.data;
+    // Cache for 6 hours
+    cacheExpiry = now + 6 * 60 * 60 * 1000;
+    return publicKeysCache;
+  } catch (err) {
+    console.error("Error fetching Google public certificates:", err.message);
+    throw new Error("Failed to fetch public certificates for token verification");
+  }
+};
+
+const verifyFirebaseToken = async (token) => {
+  const decoded = jwt.decode(token, { complete: true });
+  if (!decoded || !decoded.header || !decoded.header.kid) {
+    throw new Error("Invalid token format or missing key identifier (kid)");
+  }
+
+  const kid = decoded.header.kid;
+  const publicKeys = await getFirebasePublicKeys();
+  const cert = publicKeys[kid];
+  if (!cert) {
+    throw new Error("Matching public certificate not found for token");
+  }
+
+  const projectId = process.env.FIREBASE_PROJECT_ID || "careerhubai";
+
+  // Verify signature, issuer, and audience claims
+  const verifiedPayload = jwt.verify(token, cert, {
+    algorithms: ["RS256"],
+    audience: projectId,
+    issuer: `https://securetoken.google.com/${projectId}`
   });
-}
+
+  return verifiedPayload;
+};
 
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -25,21 +67,21 @@ const verifyToken = async (req, res, next) => {
       return next();
     }
   } catch (err) {
-    // Not a local admin JWT, ignore error and try Firebase token
+    // Not a local admin JWT, ignore error and try Firebase token next
   }
 
-  // 2. Try to verify as Firebase ID Token
+  // 2. Verify as Firebase ID Token
   try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = await verifyFirebaseToken(token);
     
-    // Look up user in MongoDB to get their role
+    // Look up user in MongoDB to check role
     const dbUser = await User.findOne({ uid: decodedToken.uid });
     
     req.user = {
       uid: decodedToken.uid,
       email: decodedToken.email,
-      name: decodedToken.name || decodedToken.email.split("@")[0],
-      role: dbUser ? dbUser.role : "student" // Default to student if not registered
+      name: decodedToken.name || (decodedToken.email ? decodedToken.email.split("@")[0] : "user"),
+      role: dbUser ? dbUser.role : "student"
     };
     
     next();
