@@ -94,7 +94,6 @@ const verifyToken = async (req, res, next) => {
     console.error("Firebase token verification failed:", error.message);
     return res.status(401).json({
       error: "Access Denied: Invalid Token",
-      details: error.message,
     });
   }
 };

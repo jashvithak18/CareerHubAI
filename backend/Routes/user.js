@@ -9,9 +9,15 @@ router.post("/sync", verifyToken, async (req, res) => {
   const { photo } = req.body;
 
   try {
-    let user = await User.findOne({ uid });
+    const query = { uid };
+    if (email) {
+      query.$or = [{ uid }, { email }];
+    }
+    let user = await User.findOne(query);
+
     if (user) {
-      // Update existing record if details changed
+      // Update existing record if details changed or if updating to new firebase project uid
+      user.uid = uid;
       user.name = name || user.name;
       user.email = email || user.email;
       if (photo) {
@@ -23,7 +29,7 @@ router.post("/sync", verifyToken, async (req, res) => {
       // Create new user record
       user = new User({
         uid,
-        name: name || email.split("@")[0],
+        name: name || (email ? email.split("@")[0] : "User"),
         email,
         photo: photo || "",
         role: "student" // Default to student
@@ -33,7 +39,11 @@ router.post("/sync", verifyToken, async (req, res) => {
     }
   } catch (error) {
     console.error("User Sync Error:", error);
-    return res.status(500).json({ error: "Internal Server Error during user sync" });
+    return res.status(500).json({ 
+      error: "Internal Server Error during user sync", 
+      message: error.message,
+      stack: error.stack
+    });
   }
 });
 
