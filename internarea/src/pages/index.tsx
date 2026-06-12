@@ -86,7 +86,7 @@ export default function SvgSlider() {
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Make your dream career a reality
         </h1>
-        <p className="text-xl text-gray-600 font-bold">Trending on CareerHub AI 🔥</p>
+        <p className="text-xl text-gray-600 font-bold">Trending on CareerHub 🔥</p>
       </div>
       {/* Swiper section */}
       <div className="mb-16">
@@ -186,7 +186,7 @@ export default function SvgSlider() {
       {/* Category section */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Latest internships on CareerHub AI
+          Latest internships on CareerHub
         </h2>
         <div className="flex flex-wrap gap-4">
           <span className="text-gray-700 font-medium pt-2">POPULAR CATEGORIES:</span>

@@ -27,7 +27,7 @@ app.use(bodyparser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("hello this is CareerHub AI backend");
+  res.send("hello this is CareerHub backend");
 });
 app.use("/api", router);
 connect();

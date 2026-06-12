@@ -94,7 +94,7 @@ const UpgradeSubscription = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight flex justify-center items-center gap-2">
-            <Sparkles className="text-amber-500 fill-amber-500" /> Choose Your CareerHub AI Plan
+            <Sparkles className="text-amber-500 fill-amber-500" /> Choose Your CareerHub Plan
           </h1>
           <p className="mt-2 text-sm text-gray-500 font-medium">
             Unlock premium templates and unlimited resumes

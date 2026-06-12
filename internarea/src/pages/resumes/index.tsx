@@ -128,7 +128,7 @@ const ResumeDashboard = () => {
           <div className="bg-white rounded-xl shadow-sm border p-12 text-center">
             <FileText className="mx-auto text-gray-300 w-16 h-16 mb-4" />
             <h3 className="text-lg font-bold text-gray-900">No resumes yet</h3>
-            <p className="text-gray-500 mt-1 mb-6">Create your first resume to apply to jobs with CareerHub AI</p>
+            <p className="text-gray-500 mt-1 mb-6">Create your first resume to apply to jobs with CareerHub</p>
             <button
               onClick={handleCreateResume}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-lg shadow transition"

@@ -119,8 +119,8 @@ const Navbar = () => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="text-xl font-bold text-blue-600 flex items-center gap-2">
-                <img src="/logo.png" alt="CareerHub AI Logo" className="h-10" />
-                <span className="font-extrabold tracking-tight text-lg hidden sm:inline text-gray-900">CareerHub <span className="text-blue-600 font-extrabold">AI</span></span>
+                <img src="/logo.png" alt="CareerHub Logo" className="h-10" />
+                <span className="font-extrabold tracking-tight text-lg hidden sm:inline text-gray-900">CareerHub</span>
               </Link>
             </div>
 
